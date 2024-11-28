@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import PostComponent from "./PostComponent";
 import "../App.css";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
+import toast from "react-hot-toast";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -20,9 +21,7 @@ const Dashboard = () => {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   useEffect(() => {
-    axios
-      .get("https://jsonplaceholder.typicode.com/users")
-      .then((res) => setUsers(res.data));
+    axios.get("https://jsonplaceholder.typicode.com/users").then((res) => setUsers(res.data));
   }, []);
 
   useEffect(() => {
@@ -30,14 +29,10 @@ const Dashboard = () => {
       .get(`https://jsonplaceholder.typicode.com/users/${selectedUserId}`)
       .then((res) => setUser(res.data));
     axios
-      .get(
-        `https://jsonplaceholder.typicode.com/posts?userId=${selectedUserId}`
-      )
+      .get(`https://jsonplaceholder.typicode.com/posts?userId=${selectedUserId}`)
       .then((res) => {
         setPosts(res.data);
-        const storedUpdatedPosts = JSON.parse(
-          localStorage.getItem("updatedPosts") || "[]"
-        );
+        const storedUpdatedPosts = JSON.parse(localStorage.getItem("updatedPosts") || "[]");
         const mergedPosts = res.data.map((post) => {
           const updatedPost = storedUpdatedPosts.find((p) => p.id === post.id);
           return updatedPost || post;
@@ -45,51 +40,69 @@ const Dashboard = () => {
         setUpdatedPosts(mergedPosts);
       });
     axios
-      .get(
-        `https://jsonplaceholder.typicode.com/todos?userId=${selectedUserId}`
-      )
+      .get(`https://jsonplaceholder.typicode.com/todos?userId=${selectedUserId}`)
       .then((res) => setTodos(res.data));
-    axios
-      .get("https://jsonplaceholder.typicode.com/comments")
-      .then((res) => setComments(res.data));
+    axios.get("https://jsonplaceholder.typicode.com/comments").then((res) => setComments(res.data));
   }, [selectedUserId]);
 
   useEffect(() => {
     if (!location.state || !location.state.selectedUserId) {
-      
       setSelectedUserId(1);
       navigate("/", { state: { selectedUserId: 1 } });
     }
   }, [location.state, navigate]);
-  
 
   const handleDelete = (id) => {
-    axios
-      .delete(`https://jsonplaceholder.typicode.com/posts/${id}`)
-      .then(() => {
-        setPosts(posts.filter((post) => post.id !== id));
-        setUpdatedPosts(updatedPosts.filter((post) => post.id !== id));
-      });
+    toast.custom((t) => (
+      <div className="toast-container">
+        <p>Are you sure you want to delete this post?</p>
+        <button
+          className="toast-btn confirm"
+          onClick={() => {
+            toast.dismiss(t.id);
+            axios.delete(`https://jsonplaceholder.typicode.com/posts/${id}`).then(() => {
+              setPosts(posts.filter((post) => post.id !== id));
+              setUpdatedPosts(updatedPosts.filter((post) => post.id !== id));
+              toast.success("Post Deleted Successfully!");
+            });
+          }}
+        >
+          Yes
+        </button>
+        <button className="toast-btn cancel" onClick={() => toast.dismiss(t.id)}>
+          No
+        </button>
+      </div>
+    ));
   };
 
   const handleEdit = (id) => {
-    const postToEdit = updatedPosts.find((post) => post.id === id);
-    navigate(`/post/${id}`);
-  };
-
-  const handlePostUpdate = (updatedPost) => {
-    setUpdatedPosts((prevPosts) =>
-      prevPosts.map((post) => (post.id === updatedPost.id ? updatedPost : post))
-    );
+    toast.custom((t) => (
+      <div className="toast-container">
+        <p>Are you sure you want to edit this post?</p>
+        <div style={{display:"flex",gap:"10px"}}>
+        <button
+          className="toast-btn confirm"
+          onClick={() => {
+            toast.dismiss(t.id);
+            navigate(`/post/${id}`);
+          }}
+        >
+          Yes
+        </button>
+        <button className="toast-btn cancel" onClick={() => toast.dismiss(t.id)}>
+          No
+        </button>
+        </div>
+      </div>
+    ));
   };
 
   const summaryData = [
     { name: "Posts", value: updatedPosts.length },
     {
       name: "Comments",
-      value: comments.filter((c) =>
-        updatedPosts.map((p) => p.id).includes(c.postId)
-      ).length,
+      value: comments.filter((c) => updatedPosts.map((p) => p.id).includes(c.postId)).length,
     },
     { name: "Todos", value: todos.length },
   ];
@@ -121,14 +134,7 @@ const Dashboard = () => {
       <div className="card chart-card">
         <h2>Summary</h2>
         <PieChart width={200} height={200}>
-          <Pie
-            data={summaryData}
-            dataKey="value"
-            nameKey="name"
-            cx="50%"
-            cy="50%"
-            outerRadius={100}
-          >
+          <Pie data={summaryData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100}>
             {summaryData.map((entry, index) => (
               <Cell key={index} fill={COLORS[index % COLORS.length]} />
             ))}
@@ -157,11 +163,7 @@ const Dashboard = () => {
 
       <div className="card posts-card">
         <h2>Posts</h2>
-        <PostComponent
-          posts={updatedPosts}
-          handleDelete={handleDelete}
-          handleEdit={handleEdit}
-        />
+        <PostComponent posts={updatedPosts} handleDelete={handleDelete} handleEdit={handleEdit} />
       </div>
     </div>
   );
