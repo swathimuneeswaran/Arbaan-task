@@ -149,7 +149,7 @@
   letter-spacing: 0.5px;
   text-transform: uppercase;
   border: 1px solid rgba(99, 102, 241, 0.1);
-  background-color: rgba(99, 102, 241, 0.1);
+  /* background-color: rgba(99, 102, 241, 0.1); */
 
 }
 
@@ -206,27 +206,7 @@
 }
 
 
-@media (prefers-color-scheme: dark) {
-  .todos-card li {
-    background: rgba(30, 41, 59, 0.8);
-  }
 
-  .todo-status-btn.status-completed {
-    background: #16a34a;
-  }
-
-  .todo-status-btn.status-completed:hover {
-    background: #15803d;
-  }
-
-  .todo-status-btn.status-pending {
-    background: #ca8a04;
-  }
-
-  .todo-status-btn.status-pending:hover {
-    background: #a16207;
-  }
-}
 
 
 .todos-card li:hover {
@@ -234,7 +214,7 @@
   background: rgba(99, 102, 241, 0.02);
 }
 
-
+/* 
 .todos-card ul::-webkit-scrollbar {
   width: 6px;
 }
@@ -251,7 +231,7 @@
 
 .todos-card ul::-webkit-scrollbar-thumb:hover {
   background: rgba(99, 102, 241, 0.3);
-}
+} */
 
 .posts-card {
   grid-column: span 12;
@@ -278,7 +258,7 @@
 
 
 .post-summary-item {
-  background: rgba(99, 102, 241, 0.03);
+  /* background: rgba(99, 102, 241, 0.03); */
   padding: 20px;
   border-radius: 12px;
   transition: all 0.3s ease;
@@ -399,9 +379,6 @@ h2 {
   background: linear-gradient(45deg, #c5cae9, #e8eaf6);
   border-radius: 4px;
 }
-
-/* Dark Mode Support */
-
 
 /* Animations */
 @keyframes fadeIn {
@@ -696,16 +673,7 @@ h2 {
   }
 }
 
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-  .dashboard .card {
-    background: rgba(30, 30, 30, 0.9);
-  }
-  
-  .todos-card li {
-    background: rgba(40, 40, 40, 0.9);
-  }
-}
+
 
 /* PostDetails Page Styles */
 
