@@ -401,32 +401,7 @@ h2 {
 }
 
 /* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background-color: #0f172a;
-    --card-background: #1e293b;
-    --text-primary: #e2e8f0;
-    --text-secondary: #94a3b8;
-  }
 
-  .card {
-    border: 1px solid #333;
-  }
-
-  .post-summary-item {
-    background: var(--card-background);
-    color: #fff;
-  }
-
-  .todos-card li {
-    border-bottom-color: #333;
-  }
-
-  select {
-    background: var(--card-background);
-    color: #fff;
-  }
-}
 
 /* Animations */
 @keyframes fadeIn {
