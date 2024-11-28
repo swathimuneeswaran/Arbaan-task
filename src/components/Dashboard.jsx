@@ -56,7 +56,8 @@ const Dashboard = () => {
     toast.custom((t) => (
       <div className="toast-container">
         <p>Are you sure you want to delete this post?</p>
-        <button
+         <div style={{display:"flex",gap:"10px"}}>
+         <button
           className="toast-btn confirm"
           onClick={() => {
             toast.dismiss(t.id);
@@ -72,6 +73,7 @@ const Dashboard = () => {
         <button className="toast-btn cancel" onClick={() => toast.dismiss(t.id)}>
           No
         </button>
+         </div>
       </div>
     ));
   };
