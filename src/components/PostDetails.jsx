@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from "react-hot-toast";
 import "../App.css";
 
 const PostDetails = () => {
@@ -37,7 +38,7 @@ const PostDetails = () => {
           newUpdatedPosts.push(updatedPost);
           localStorage.setItem('updatedPosts', JSON.stringify(newUpdatedPosts));
           
-          alert('Post saved successfully!');
+          toast.success('Post saved successfully!');
           navigate('/', { state: { selectedUserId: post.userId } });
         } catch (error) {
           
@@ -48,7 +49,7 @@ const PostDetails = () => {
       })
       .catch(error => {
         console.error('Error updating post:', error);
-        alert('Failed to save post');
+        toast.error('Failed to save post');
         
         navigate('/', { state: { selectedUserId: 1 } });
       });
